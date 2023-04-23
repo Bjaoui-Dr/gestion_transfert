@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    image: drissbjaoui/gestiontransfert:backend
+    container_name: backend_c
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_APPLICATION_JSON: '{
+             "spring.datasource.url"  : "jdbc:mysql://db:3306/gestion?createDatabaseIfNotExist=true",
+             "spring.datasource.username" : "root",
+             "spring.datasource.password" : "example",
+             "spring.jpa.hibernate.ddl-auto" : "update"
+           }'
+
+
+  db:
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: example
+
+volumes:
+  data:
