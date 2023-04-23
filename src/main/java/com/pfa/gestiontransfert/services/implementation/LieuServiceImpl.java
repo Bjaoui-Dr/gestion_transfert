@@ -1,12 +1,13 @@
 package com.pfa.gestiontransfert.services.implementation;
 
 import com.pfa.gestiontransfert.dto.requestDto.LieuRequestDto;
-import com.pfa.gestiontransfert.exceptions.LieuException;
+import com.pfa.gestiontransfert.exceptions.BaseException;
 import com.pfa.gestiontransfert.models.Lieu;
 import com.pfa.gestiontransfert.repositories.LieuRepository;
 import com.pfa.gestiontransfert.services.LieuService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,14 +35,14 @@ public class LieuServiceImpl implements LieuService {
     }
 
     @Override
-    public Lieu getLieuById(Long lieuId) throws LieuException {
+    public Lieu getLieuById(Long lieuId) throws BaseException {
         return lieuRepository.findById(lieuId)
-                .orElseThrow(() -> new LieuException("lieu not found"));
+                .orElseThrow(() -> new BaseException("lieu not found", HttpStatus.NOT_FOUND));
     }
 
     @Transactional
     @Override
-    public Lieu editLieu(Long lieuId, LieuRequestDto lieuRequestDto) throws LieuException{
+    public Lieu editLieu(Long lieuId, LieuRequestDto lieuRequestDto) throws BaseException {
         Lieu lieuToEdit = getLieuById(lieuId);
         lieuToEdit.setNomLieu(lieuRequestDto.getNomLieu());
         return lieuToEdit;

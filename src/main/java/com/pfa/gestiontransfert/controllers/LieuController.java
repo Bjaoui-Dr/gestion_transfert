@@ -1,8 +1,7 @@
 package com.pfa.gestiontransfert.controllers;
 
 import com.pfa.gestiontransfert.dto.requestDto.LieuRequestDto;
-import com.pfa.gestiontransfert.exceptions.LieuException;
-import com.pfa.gestiontransfert.exceptions.exceptionHandling.ResponseException;
+import com.pfa.gestiontransfert.exceptions.BaseException;
 import com.pfa.gestiontransfert.models.Lieu;
 import com.pfa.gestiontransfert.services.LieuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class LieuController {
     }
 
     @GetMapping("/{lieuId}")
-    public ResponseEntity<Lieu> getLieuById(@PathVariable Long lieuId) throws LieuException {
+    public ResponseEntity<Lieu> getLieuById(@PathVariable Long lieuId) throws BaseException {
         Lieu lieu = lieuService.getLieuById(lieuId);
         return new ResponseEntity<>(lieu,HttpStatus.OK);
     }
@@ -42,16 +41,14 @@ public class LieuController {
     }
 
     @PutMapping("/{lieuId}")
-    public ResponseEntity<Lieu> editLieu(@PathVariable Long lieuId, @RequestBody LieuRequestDto lieuRequestDto) throws LieuException {
+    public ResponseEntity<Lieu> editLieu(@PathVariable Long lieuId, @RequestBody LieuRequestDto lieuRequestDto) throws BaseException {
         Lieu lieu = lieuService.editLieu(lieuId, lieuRequestDto);
         return new ResponseEntity<>(lieu, HttpStatus.OK);
     }
 
-    @ExceptionHandler(value = LieuException.class)
-    public ResponseEntity<Object> handleLieuException(LieuException e) {
-        ResponseException responseException = new ResponseException(e.getHttpStatus().value(), e.getMessage(),
-                e.getHttpStatus(), ZonedDateTime.now());
-        return new ResponseEntity<>(responseException, e.getHttpStatus());
+    @ExceptionHandler(value = BaseException.class)
+    public ResponseEntity<Object> handleLieuException(BaseException e) {
+        return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
     }
 
 }

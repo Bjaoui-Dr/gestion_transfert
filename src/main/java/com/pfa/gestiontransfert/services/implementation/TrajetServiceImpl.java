@@ -1,8 +1,7 @@
 package com.pfa.gestiontransfert.services.implementation;
 
 import com.pfa.gestiontransfert.dto.requestDto.TrajetRequestDto;
-import com.pfa.gestiontransfert.exceptions.LieuException;
-import com.pfa.gestiontransfert.exceptions.TrajetException;
+import com.pfa.gestiontransfert.exceptions.BaseException;
 import com.pfa.gestiontransfert.models.Lieu;
 import com.pfa.gestiontransfert.models.Trajet;
 import com.pfa.gestiontransfert.repositories.TrajetRepository;
@@ -29,15 +28,15 @@ public class TrajetServiceImpl implements TrajetService {
 
     @Transactional
     @Override
-    public Trajet addTrajet(TrajetRequestDto trajetRequestDto) throws TrajetException, LieuException {
+    public Trajet addTrajet(TrajetRequestDto trajetRequestDto) throws BaseException {
         Trajet trajet = new Trajet();
         if(trajetRequestDto.getLieuDepartId() == null ||
                 trajetRequestDto.getLieuArriverId() == null) {
-            throw new TrajetException("Lieu depart et arriver ne peuvent pas etre null",
+            throw new BaseException("Lieu depart et arriver ne peuvent pas etre null",
                     HttpStatus.BAD_REQUEST);
         }
         if(trajetRequestDto.getLieuDepartId() == trajetRequestDto.getLieuArriverId()){
-            throw new TrajetException("Le lieu depart ne peut pas etre le lieu d'arriver",HttpStatus.BAD_REQUEST);
+            throw new BaseException("Le lieu depart ne peut pas etre le lieu d'arriver",HttpStatus.BAD_REQUEST);
         }
         Lieu lieuDepart = lieuService.getLieuById(trajetRequestDto.getLieuDepartId());
         Lieu lieuArriver = lieuService.getLieuById(trajetRequestDto.getLieuArriverId());
@@ -53,13 +52,13 @@ public class TrajetServiceImpl implements TrajetService {
     }
 
     @Override
-    public Trajet getTrajetById(Long id) throws TrajetException {
+    public Trajet getTrajetById(Long id) throws BaseException {
         return trajetRepository.findById(id)
-                .orElseThrow(() -> new TrajetException("trajet not found"));
+                .orElseThrow(() -> new BaseException("trajet not found", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public List<Lieu> findLieuDepartByLieuArriverTrajetActive(Long LieuDepart) throws LieuException {
+    public List<Lieu> findLieuDepartByLieuArriverTrajetActive(Long LieuDepart) throws BaseException {
         return trajetRepository.findLieuDepartByLieuArriverTrajetActive(LieuDepart);
     }
 
@@ -71,18 +70,17 @@ public class TrajetServiceImpl implements TrajetService {
 
     @Transactional
     @Override
-    public Trajet editTrajet(Long id, TrajetRequestDto trajetRequestDto) throws TrajetException, LieuException {
+    public Trajet editTrajet(Long id, TrajetRequestDto trajetRequestDto) throws BaseException {
         Trajet trajetToEdit = getTrajetById(id);
-        if((trajetRequestDto.getLieuDepartId() != trajetRequestDto.getLieuArriverId())
-                && (trajetRequestDto.getLieuDepartId() != null &&
-                    trajetRequestDto.getLieuArriverId() != null)){
+        if((trajetRequestDto.getLieuDepartId() != trajetRequestDto.getLieuArriverId())){
             Lieu lieuDepart = lieuService.getLieuById(trajetRequestDto.getLieuDepartId());
             Lieu lieuArriver = lieuService.getLieuById(trajetRequestDto.getLieuArriverId());
             trajetToEdit.setLieuDepart(lieuDepart);
             trajetToEdit.setLieuArriver(lieuArriver);
             trajetToEdit.setActive(trajetRequestDto.isActive());
             return trajetRepository.save(trajetToEdit);
+        } else {
+            throw new BaseException("verifier le lieu de depart et arriver avant modification du trajet", HttpStatus.BAD_REQUEST);
         }
-        return trajetToEdit;
     }
 }
