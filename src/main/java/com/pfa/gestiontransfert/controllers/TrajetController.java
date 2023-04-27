@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/trajet")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TrajetController {
     public final TrajetService trajetService;
 

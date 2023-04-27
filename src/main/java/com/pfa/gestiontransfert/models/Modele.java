@@ -1,6 +1,6 @@
 package com.pfa.gestiontransfert.models;
 
-import com.pfa.gestiontransfert.enumerations.TypeVoiture;
+import com.pfa.gestiontransfert.enumerations.TypeModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +11,16 @@ import lombok.NoArgsConstructor;
 public class Modele {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long idModel;
     private String nom;
-    private int nbr_place;
-    private double tarif;
-    private TypeVoiture type_voiture;
+    private int nbrPlace;
+    @Enumerated(EnumType.STRING)
+    private TypeModel typeVoiture;
+
+    public Modele(String nom, int nbrPlace, TypeModel typeVoiture) {
+        this.nom = nom;
+        this.nbrPlace = nbrPlace;
+        this.typeVoiture = typeVoiture;
+    }
 
 }

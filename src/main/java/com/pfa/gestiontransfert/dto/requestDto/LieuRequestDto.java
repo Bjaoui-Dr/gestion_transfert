@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class LieuRequestDto {
-    String nomLieu;
+    private String nomLieu;
 }

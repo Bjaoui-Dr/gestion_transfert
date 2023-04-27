@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class Trajet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idTrajet;
     @ManyToOne
     private  Lieu lieuDepart;
     @ManyToOne

@@ -1,4 +1,5 @@
 package com.pfa.gestiontransfert.models;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,14 +7,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Lieu {
+public class Prix {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idLieu;
-    @Column(nullable = false)
-    String nomLieu;
-
-    public Lieu(String nomLieu) {
-        this.nomLieu = nomLieu;
-    }
+    private Long idPrix;
+    private double prix;
+    @ManyToOne
+    private Modele modele;
+    @ManyToOne
+    private Trajet trajet;
+    @ManyToOne
+    private Periode periode;
 }

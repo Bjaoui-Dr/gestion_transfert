@@ -6,6 +6,7 @@ import com.pfa.gestiontransfert.models.Lieu;
 import com.pfa.gestiontransfert.repositories.LieuRepository;
 import com.pfa.gestiontransfert.services.LieuService;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,16 +17,18 @@ import java.util.List;
 public class LieuServiceImpl implements LieuService {
 
     private final LieuRepository lieuRepository;
+    private final ModelMapper mapper;
 
     @Autowired
-    public LieuServiceImpl(LieuRepository lieuRepository) {
+    public LieuServiceImpl(LieuRepository lieuRepository,
+                           ModelMapper mapper) {
         this.lieuRepository = lieuRepository;
+        this.mapper = mapper;
     }
 
     @Override
     public Lieu addLieu(LieuRequestDto lieuRequestDto) {
-        Lieu lieu = new Lieu();
-        lieu.setNomLieu(lieuRequestDto.getNomLieu());
+        Lieu lieu = mapper.map(lieuRequestDto, Lieu.class);
         return lieuRepository.save(lieu);
     }
 

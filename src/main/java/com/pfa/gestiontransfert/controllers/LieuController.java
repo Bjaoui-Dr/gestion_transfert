@@ -14,8 +14,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/lieu")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LieuController {
-    public final LieuService lieuService;
+    private final LieuService lieuService;
 
     @Autowired
     public LieuController(LieuService lieuService) {

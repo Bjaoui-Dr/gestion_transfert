@@ -1,8 +1,7 @@
 package com.pfa.gestiontransfert.enumerations;
 
-public enum TypeVoiture {
+public enum TypeModel {
     PETITE,
     GROSSE,
     LUXE
-
 }
