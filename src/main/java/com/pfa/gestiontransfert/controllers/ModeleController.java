@@ -1,6 +1,7 @@
 package com.pfa.gestiontransfert.controllers;
 
 import com.pfa.gestiontransfert.dto.requestDto.ModelRequestDto;
+import com.pfa.gestiontransfert.enumerations.TypeModel;
 import com.pfa.gestiontransfert.exceptions.BaseException;
 import com.pfa.gestiontransfert.models.Horaire;
 import com.pfa.gestiontransfert.models.Modele;
@@ -40,8 +41,16 @@ public class ModeleController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Modele> addModele(@RequestBody ModelRequestDto modelRequestDto) throws BaseException, IOException{
-        Modele modele = modeleService.addModele(modelRequestDto);
+    public ResponseEntity<Modele> addModele(@RequestParam("nom") String nom,
+                                            @RequestParam("nbrPlace") int nbrPlace,
+                                            @RequestParam("typeVoiture") TypeModel typeVoiture,
+                                            @RequestParam("active") boolean active,
+                                            @RequestParam("file") MultipartFile file) throws BaseException, IOException{
+        Modele modele = modeleService.addModele(nom,
+                nbrPlace,
+                typeVoiture,
+                active,
+                file);
         return new ResponseEntity<>(modele, HttpStatus.CREATED);
     }
 

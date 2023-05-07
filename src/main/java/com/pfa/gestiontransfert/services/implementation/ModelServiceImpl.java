@@ -38,12 +38,30 @@ public class ModelServiceImpl implements ModeleService {
     }
 
     @Override
-    public Modele addModele(ModelRequestDto modelRequestDto) throws BaseException {
-        Modele modele = mapper.map(modelRequestDto, Modele.class);
-        if (modele.getTypeVoiture() == null ||
-                !Arrays.asList(TypeModel.values()).contains(modele.getTypeVoiture())) {
-            throw new BaseException("Invalid typeVoiture", HttpStatus.BAD_REQUEST);
+    public Modele addModele(String nom,
+                            int nbrPlace,
+                            TypeModel typeVoiture,
+                            boolean active,
+                            MultipartFile file) throws BaseException {
+        Modele modele = new Modele();
+//        if (modele.getTypeVoiture() == null ||
+//                !Arrays.asList(TypeModel.values()).contains(modele.getTypeVoiture())) {
+//            throw new BaseException("Invalid typeVoiture", HttpStatus.BAD_REQUEST);
+//        }
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        if(fileName.contains(".."))
+        {
+            System.out.println("not a a valid file");
         }
+        try {
+            modele.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        modele.setNom(nom);
+        modele.setActive(active);
+        modele.setNbrPlace(nbrPlace);
+        modele.setTypeVoiture(typeVoiture);
         return modelRepository.save(modele);
     }
 

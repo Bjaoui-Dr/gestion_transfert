@@ -19,6 +19,9 @@ public class Modele {
     @Enumerated(EnumType.STRING)
     private TypeModel typeVoiture;
     private boolean active;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private String image;
 
     public Modele(String nom, int nbrPlace, TypeModel typeVoiture, String imgPath) {
         this.nom = nom;
