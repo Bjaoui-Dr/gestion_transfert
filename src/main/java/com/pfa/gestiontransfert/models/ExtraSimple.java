@@ -9,15 +9,12 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class ExtraSimple {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idExtraSimple;
-    private String nom;
+@DiscriminatorValue("simple")
+public class ExtraSimple extends Extra {
     private double tarif;
 
     public ExtraSimple(String nom, double tarif) {
-        this.nom = nom;
+        super(nom);
         this.tarif = tarif;
     }
 }

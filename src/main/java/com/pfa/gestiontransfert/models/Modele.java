@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Blob;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,8 +18,9 @@ public class Modele {
     private int nbrPlace;
     @Enumerated(EnumType.STRING)
     private TypeModel typeVoiture;
+    private boolean active;
 
-    public Modele(String nom, int nbrPlace, TypeModel typeVoiture) {
+    public Modele(String nom, int nbrPlace, TypeModel typeVoiture, String imgPath) {
         this.nom = nom;
         this.nbrPlace = nbrPlace;
         this.typeVoiture = typeVoiture;

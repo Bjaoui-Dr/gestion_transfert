@@ -15,7 +15,6 @@ public class Horaire {
     private Long idHoraire;
     private LocalTime startTime;
     private LocalTime endTime;
-    private double extraFees;
 
     // static field to hold the loaded Horaire object
     private static Horaire agenceHoraire;

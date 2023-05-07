@@ -48,7 +48,7 @@ public class LieuController {
     }
 
     @ExceptionHandler(value = BaseException.class)
-    public ResponseEntity<Object> handleLieuException(BaseException e) {
+    public ResponseEntity<Object> handleException(BaseException e) {
         return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
     }
 

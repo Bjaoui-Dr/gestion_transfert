@@ -78,7 +78,7 @@ public class TrajetServiceImpl implements TrajetService {
             trajetToEdit.setLieuDepart(lieuDepart);
             trajetToEdit.setLieuArriver(lieuArriver);
             trajetToEdit.setActive(trajetRequestDto.isActive());
-            return trajetRepository.save(trajetToEdit);
+            return trajetToEdit;
         } else {
             throw new BaseException("verifier le lieu de depart et arriver avant modification du trajet", HttpStatus.BAD_REQUEST);
         }

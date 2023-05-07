@@ -9,7 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -36,10 +40,11 @@ public class ModeleController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Modele> addModele(@RequestBody ModelRequestDto modelRequestDto) throws BaseException{
+    public ResponseEntity<Modele> addModele(@RequestBody ModelRequestDto modelRequestDto) throws BaseException, IOException{
         Modele modele = modeleService.addModele(modelRequestDto);
         return new ResponseEntity<>(modele, HttpStatus.CREATED);
     }
+
 
     @PutMapping("{idModele}")
     public ResponseEntity<Modele> editModele(@PathVariable Long idModele, @RequestBody ModelRequestDto modelRequestDto) throws BaseException {
@@ -54,7 +59,7 @@ public class ModeleController {
 //    }
 
     @ExceptionHandler(value = BaseException.class)
-    public ResponseEntity<Object> handleLieuException(BaseException e) {
+    public ResponseEntity<Object> handleException(BaseException e) {
         return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
     }
 }

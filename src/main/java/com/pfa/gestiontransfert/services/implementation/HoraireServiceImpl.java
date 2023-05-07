@@ -31,7 +31,6 @@ public class HoraireServiceImpl implements HoraireService {
         Horaire horaireToEdit = getHoraire();
         horaireToEdit.setStartTime(horaireRequestDto.getStartTime());
         horaireToEdit.setEndTime(horaireRequestDto.getEndTime());
-        horaireToEdit.setExtraFees(horaireRequestDto.getExtraFees());
         return horaireToEdit;
     }
 }

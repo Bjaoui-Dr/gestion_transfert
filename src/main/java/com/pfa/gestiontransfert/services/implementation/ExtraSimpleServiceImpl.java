@@ -49,7 +49,7 @@ public class ExtraSimpleServiceImpl implements ExtraSimpleService {
     public ExtraSimple editExtraSimple(Long extraSimpleId, ExtraSimpleRequestDto extraSimpleRequestDto) throws BaseException {
         if(extraSimpleRepository.existsById(extraSimpleId)) {
             ExtraSimple extraSimpleToEdit = mapper.map(extraSimpleRequestDto, ExtraSimple.class);
-            extraSimpleToEdit.setIdExtraSimple(extraSimpleId);
+            extraSimpleToEdit.setIdExtra(extraSimpleId);
             return extraSimpleRepository.save(extraSimpleToEdit);
 
         } else {

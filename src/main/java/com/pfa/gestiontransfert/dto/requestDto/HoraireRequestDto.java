@@ -8,5 +8,4 @@ import java.time.LocalTime;
 public class HoraireRequestDto {
     private LocalTime startTime;
     private LocalTime endTime;
-    private double extraFees;
 }

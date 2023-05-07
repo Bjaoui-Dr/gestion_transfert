@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="user_type",
-        discriminatorType = DiscriminatorType.INTEGER)
+        discriminatorType = DiscriminatorType.STRING)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

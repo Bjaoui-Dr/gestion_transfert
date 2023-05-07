@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@DiscriminatorValue("2")
+@DiscriminatorValue("agent")
 public class Agent extends User {
     public  Agent(String nom,
                    String prenom,

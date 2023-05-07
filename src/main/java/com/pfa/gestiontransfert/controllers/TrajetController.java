@@ -66,7 +66,7 @@ public class TrajetController {
     }
 
     @ExceptionHandler(value = BaseException.class)
-    public ResponseEntity<Object> handleTrajetException(BaseException e) {
+    public ResponseEntity<Object> handleException(BaseException e) {
         return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
     }
 }

@@ -16,6 +16,7 @@ public class Periode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPeriode;
+    private String nom;
     private LocalDate dateDebut;
     private LocalDate dateFin;
 

@@ -33,12 +33,11 @@ public class Reservation {
     private  int qteModele;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
-            name = "reservation_extra_simple",
+            name = "reservation_extra",
             joinColumns = @JoinColumn(name = "reservation_id"),
-            inverseJoinColumns = @JoinColumn(name = "extra_simple_id")
+            inverseJoinColumns = @JoinColumn(name = "extra_id")
     )
-    private List<ExtraSimple> extraSimples = new ArrayList<>();
-    private double extraFees;
+    private List<Extra> extra = new ArrayList<>();
     private double totale; //totale (extraFees inclus s'il existe)  totale = totale + extraFees
 
 
@@ -48,12 +47,12 @@ public class Reservation {
 //        this.etat = Etat.EN_ATTENDE;
 //    }
 
-    public void addExtraSimple(ExtraSimple extraSimple){
-        this.extraSimples.add(extraSimple);
+    public void addExtraSimple(Extra extra){
+        this.extra.add(extra);
     }
 
-    public void removeExtraSimple(ExtraSimple extraSimple) {
-        this.extraSimples.remove(extraSimple);
+    public void removeExtraSimple(Extra extra) {
+        this.extra.remove(extra);
     }
 
 

@@ -1,5 +1,9 @@
 package com.pfa.gestiontransfert.services.implementation;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.pfa.gestiontransfert.dto.requestDto.ModelRequestDto;
 import com.pfa.gestiontransfert.enumerations.TypeModel;
 import com.pfa.gestiontransfert.exceptions.BaseException;
@@ -10,9 +14,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
