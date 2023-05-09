@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -35,6 +36,12 @@ public class PeriodeController {
         return new ResponseEntity<>(periode, HttpStatus.OK);
     }
 
+    @GetMapping("idPeriode/{date}")
+    public ResponseEntity<Long> getPeriodeById(@PathVariable LocalDate date) throws BaseException {
+        Long periodeId = periodeService.getIdPeriod(date);
+        return new ResponseEntity<>(periodeId, HttpStatus.OK);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<Periode>> getAllPeriodes() {
         List<Periode> periodes = periodeService.getAllPeriodes();
@@ -46,6 +53,8 @@ public class PeriodeController {
         Periode periode = periodeService.editePeriode(periodeId, periodeRequestDto);
         return new ResponseEntity<>(periode, HttpStatus.OK);
     }
+
+
 
     @ExceptionHandler(value = BaseException.class)
     public ResponseEntity<Object> handleException(BaseException e) {

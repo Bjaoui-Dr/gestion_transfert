@@ -4,6 +4,7 @@ import com.pfa.gestiontransfert.dto.requestDto.PeriodeRequestDto;
 import com.pfa.gestiontransfert.exceptions.BaseException;
 import com.pfa.gestiontransfert.models.Periode;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PeriodeService {
@@ -11,4 +12,5 @@ public interface PeriodeService {
     Periode getPeriodeById(Long periodeId) throws BaseException;
     List<Periode> getAllPeriodes();
     Periode editePeriode(Long periodeId, PeriodeRequestDto periodeRequestDto) throws BaseException;
+    public Long getIdPeriod(LocalDate date);
 }

@@ -38,6 +38,12 @@ public class PrixController {
         return new ResponseEntity<>(prix, HttpStatus.OK);
     }
 
+    @GetMapping("/{prixId}/{modelId}/{trajetId}")
+    public ResponseEntity<Double> getPrixByModelTrajetPeriode(@PathVariable Long prixId, @PathVariable Long modelId, @PathVariable Long trajetId) throws BaseException {
+        double prix = prixService.getPrixByModelTrajetPeriode(prixId, modelId, trajetId);
+        return new ResponseEntity<>(prix, HttpStatus.OK);
+    }
+
     @PutMapping("/{prixId}")
     public ResponseEntity<Prix> editPrix(@PathVariable Long prixId, @RequestBody PrixRequestDto prixRequestDto) throws BaseException {
         Prix prix = prixService.editPrix(prixId, prixRequestDto);

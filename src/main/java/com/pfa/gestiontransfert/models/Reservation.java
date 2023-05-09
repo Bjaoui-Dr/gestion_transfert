@@ -42,12 +42,29 @@ public class Reservation {
 
 
 // constructeur
-//    public Reservation() {
-//        this.date_creation = LocalDateTime.now();
-//        this.etat = Etat.EN_ATTENDE;
-//    }
+    public Reservation(Trajet trajetDepart,
+                       LocalDateTime dateAndTimeAller,
+                       Trajet trajetRetour,
+                       LocalDateTime dateAndTimeRetour,
+                       int nbrVoyageurs,
+                       Modele model,
+                       int qteModele,
+                       List<Extra> extra,
+                       double totale) {
+        this.dateCreation = LocalDateTime.now();
+        this.etat = Etat.EN_ATTENDE;
+        this.trajetDepart = trajetDepart;
+        this.dateAndTimeAller = dateAndTimeAller;
+        this.trajetRetour = trajetRetour;
+        this.dateAndTimeAller =dateAndTimeRetour;
+        this.nbrVoyageurs = nbrVoyageurs;
+        this.model = model;
+        this.qteModele = qteModele;
+        this.extra = extra;
+        this.totale = totale;
+    }
 
-    public void addExtraSimple(Extra extra){
+    public void addExtra(Extra extra){
         this.extra.add(extra);
     }
 
@@ -55,21 +72,8 @@ public class Reservation {
         this.extra.remove(extra);
     }
 
+    public void addExtraFees(double extraFees) {
+        this.totale += extraFees;
+    }
 
-//    public void calculateExtraFees(Reservation reservation, Horaire horaire) {
-//        LocalDateTime dateAndTimeAller = reservation.getDateAndTimeAller();
-//        LocalTime timeAller = dateAndTimeAller.toLocalTime();
-//
-//        // Compare the timeAller with the agency's opening and closing times
-//        LocalTime startTime = horaire.getStartTime();
-//        LocalTime endTime = horaire.getEndTime();
-//
-//        if (timeAller.isBefore(startTime) || timeAller.isAfter(endTime)) {
-//            // Calculate the extra fees if the timeAller is outside of the agency's working hours
-//            Double totalPrice = reservation.getTotale();
-//            Double extraFees = totalPrice * horaire.getExtraFees(); // 10% extra fees
-//            this.setExtraFees(extraFees);
-//            reservation.setTotale(totalPrice + extraFees);
-//        }
-//    }
 }

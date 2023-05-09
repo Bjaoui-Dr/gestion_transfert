@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface TrajetRepository extends JpaRepository<Trajet, Long> {
-    @Query("SELECT t.lieuArriver FROM Trajet t WHERE t.lieuDepart.id = :lieuDepartId AND t.active = true")
+    @Query("SELECT t.lieuArriver FROM Trajet t WHERE t.lieuDepart.idLieu = :lieuDepartId AND t.active = true")
     List<Lieu> findLieuDepartByLieuArriverTrajetActive(@Param("lieuDepartId") Long lieuDepartId);
 
     @Query("SELECT t.lieuDepart FROM Trajet t WHERE t.active = true")

@@ -65,8 +65,8 @@ public class PrixServiceImpl implements PrixService {
     }
 
     @Override
-    public Prix getPrixByModelTrajetPeriode(Long prixId, Long modelId, Long trajetId) throws BaseException {
-        return null;
+    public double getPrixByModelTrajetPeriode(Long idModele, Long idTrajet, Long idPeriode) throws BaseException {
+        return prixRepository.findPrixByModeleAndTrajetAndPeriode(idModele, idTrajet, idPeriode);
     }
 
     @Override
