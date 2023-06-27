@@ -45,11 +45,13 @@ public class ModeleController {
                                             @RequestParam("nbrPlace") int nbrPlace,
                                             @RequestParam("typeVoiture") TypeModel typeVoiture,
                                             @RequestParam("active") boolean active,
+                                            @RequestParam("price") double price,
                                             @RequestParam("file") MultipartFile file) throws BaseException, IOException{
         Modele modele = modeleService.addModele(nom,
                 nbrPlace,
                 typeVoiture,
                 active,
+                price,
                 file);
         return new ResponseEntity<>(modele, HttpStatus.CREATED);
     }

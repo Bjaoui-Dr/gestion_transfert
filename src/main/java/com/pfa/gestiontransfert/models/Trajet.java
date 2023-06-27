@@ -16,10 +16,14 @@ public class Trajet {
     private  Lieu lieuArriver;
     @Column(nullable = false)
     private boolean active;
+    private double price;
+    private float distance;
 
-    public Trajet(Lieu lieuDepart, Lieu lieuArriver, boolean active) {
+    public Trajet(Lieu lieuDepart, Lieu lieuArriver, boolean active, double price, float distance) {
         this.lieuDepart = lieuDepart;
         this.lieuArriver = lieuArriver;
         this.active = active;
+        this.price = price;
+        this.distance = distance;
     }
 }

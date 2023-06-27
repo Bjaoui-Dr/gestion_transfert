@@ -24,25 +24,19 @@ public class ReservationServiceImpl implements ReservationService {
     private final ModeleService modeleService;
     private final PeriodeService periodeService;
     private final TrajetServiceImpl trajetService;
-    private final PrixService prixService;
-    private final ExtraSimpleService extraSimpleService;
-    private final ExtraSpecialService extraSpecialService;
+    private final ExtraService extraService;
 
     @Autowired
     public ReservationServiceImpl(ReservationRepository reservationRepository,
                                   ModeleService modeleService,
                                   PeriodeService periodeService,
                                   TrajetServiceImpl trajetService,
-                                  PrixService prixService,
-                                  ExtraSimpleService extraSimpleService,
-                                  ExtraSpecialService extraSpecialService){
+                                  ExtraService extraService){
         this.reservationRepository = reservationRepository;
         this.modeleService = modeleService;
         this.periodeService = periodeService;
         this.trajetService = trajetService;
-        this.prixService = prixService;
-        this.extraSimpleService = extraSimpleService;
-        this.extraSpecialService = extraSpecialService;
+        this.extraService = extraService;
     }
 
     @Override
@@ -61,13 +55,15 @@ public class ReservationServiceImpl implements ReservationService {
         LocalDate dateAller = reservationRequestDto.getDateAndTimeAller().toLocalDate();
         LocalTime timeAller = reservationRequestDto.getDateAndTimeAller().toLocalTime();
         Long idPeriode = periodeService.getIdPeriod(dateAller);
+        Periode periodeAller = periodeService.getPeriodeById(idPeriode);
 
-        double prix = prixService.getPrixByModelTrajetPeriode(reservationRequestDto.getIdModel(),
-                reservationRequestDto.getIdTrajetDepart(),
-                idPeriode);
-
+        double prix = 0;
         reservation.setTotale(prix);
+        reservation.addFees(trajetDepart.getPrice());
+        reservation.addFees(modele.getPrice());
+        reservation.addFees(periodeAller.getPrice());
 
+        // trajet aller
         // Add all extra simple
         addExtraSimple(reservationRequestDto, reservation);
 
@@ -75,70 +71,63 @@ public class ReservationServiceImpl implements ReservationService {
         LocalTime startTime = Horaire.getAgenceHoraire().getStartTime();
         LocalTime endTime = Horaire.getAgenceHoraire().getEndTime();
 
-        // trajet aller
+        //ajouter extra simple
         addExtraSpecialHorsTime(timeAller,
                 startTime,
                 endTime,
-                reservation,
-                prix);
+                reservation);
 
-        addExtraSpecialBeforeDate(dateAller,reservation,prix);
+        addExtraSpecialBeforeDate(dateAller,reservation);
 
         // trajet retour
-        if(reservationRequestDto.getIdTrajetRetour() != null){
-            LocalTime timeRetour = reservationRequestDto.getDateAndTimeRetour().toLocalTime();
-            Trajet trajetRetour = trajetService.getTrajetById(reservationRequestDto.getIdTrajetRetour());
-            reservation.setTrajetRetour(trajetRetour);
-            reservation.setDateAndTimeRetour(reservationRequestDto.getDateAndTimeRetour());
-            double prixRetour = prixService.getPrixByModelTrajetPeriode(reservationRequestDto.getIdModel(),
-                    reservationRequestDto.getIdTrajetRetour(),
-                    idPeriode);
-            reservation.addExtraFees(prixRetour);
-            addExtraSpecialHorsTime(timeRetour,
-                    startTime,
-                    endTime,
-                    reservation,
-                    prixRetour);
-        }
+//        if(reservationRequestDto.getIdTrajetRetour() != null){
+//            LocalTime timeRetour = reservationRequestDto.getDateAndTimeRetour().toLocalTime();
+//            Trajet trajetRetour = trajetService.getTrajetById(reservationRequestDto.getIdTrajetRetour());
+//            reservation.setTrajetRetour(trajetRetour);
+//            reservation.setDateAndTimeRetour(reservationRequestDto.getDateAndTimeRetour());
+//            double prixRetour = prixService.getPrixByModelTrajetPeriode(reservationRequestDto.getIdModel(),
+//                    reservationRequestDto.getIdTrajetRetour(),
+//                    idPeriode);
+//            reservation.addExtraFees(prixRetour);
+//            addExtraSpecialHorsTime(timeRetour,
+//                    startTime,
+//                    endTime,
+//                    reservation,
+//                    prixRetour);
+//        }
 
         return reservationRepository.save(reservation);
     }
 
     private void addExtraSimple(ReservationRequestDto reservationRequestDto,
                                 Reservation reservation) throws BaseException {
-        List<Extra> extraSimples = new ArrayList<>();
+        List<Extra> extras = new ArrayList<>();
         for(Long idExtra : reservationRequestDto.getIdExtras()){
-            ExtraSimple extraSimple = extraSimpleService.getExtraSimpleById(idExtra);
-            reservation.addExtraFees(extraSimple.getTarif());
-            reservation.addExtra(extraSimple);
+            Extra extraSimples = extraService.getExtraById(idExtra);
+            reservation.addFees(extraSimples.getTarif());
+            reservation.addExtra(extraSimples);
         }
     }
 
     public void addExtraSpecialHorsTime(LocalTime timeAller,
                                         LocalTime startTime,
                                         LocalTime endTime,
-                                        Reservation reservation,
-                                        double prix) throws BaseException {
+                                        Reservation reservation) throws BaseException {
         //LocalTime timeAller = reservationRequestDto.getDateAndTimeAller().toLocalTime();
         if(timeAller.isBefore(startTime) || timeAller.isAfter(endTime)) {
-            ExtraSpecial extraSpecialHorsTime = extraSpecialService.getExtraSpecialById(3L);
+            Extra extraSpecialHorsTime = extraService.getExtraById(3L);
             reservation.addExtra(extraSpecialHorsTime);
-            double fees = extraSpecialHorsTime.getPercent();
-            double extraCostHorsTime = prix * fees /100;
-            reservation.addExtraFees(extraCostHorsTime);
+            reservation.addFees(extraSpecialHorsTime.getTarif());
         }
     }
 
     public void addExtraSpecialBeforeDate(LocalDate dateAller,
-                                          Reservation reservation,
-                                          double prix) throws BaseException {
+                                          Reservation reservation) throws BaseException {
         long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), dateAller);
         if (daysBetween <=2){
-            ExtraSpecial extraSpecialBeforeDate = extraSpecialService.getExtraSpecialById(4L);
-            double fees = extraSpecialBeforeDate.getPercent();
+            Extra extraSpecialBeforeDate = extraService.getExtraById(4L);
             reservation.addExtra(extraSpecialBeforeDate);
-            double extraCostBeforeDate = prix * fees / 100;
-            reservation.addExtraFees(extraCostBeforeDate);
+            reservation.addFees(extraSpecialBeforeDate.getTarif());
         }
     }
 

@@ -72,7 +72,7 @@ public class Reservation {
         this.extra.remove(extra);
     }
 
-    public void addExtraFees(double extraFees) {
+    public void addFees(double extraFees) {
         this.totale += extraFees;
     }
 

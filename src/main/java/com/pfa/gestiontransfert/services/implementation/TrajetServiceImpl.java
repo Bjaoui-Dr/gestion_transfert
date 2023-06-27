@@ -42,6 +42,8 @@ public class TrajetServiceImpl implements TrajetService {
         Lieu lieuArriver = lieuService.getLieuById(trajetRequestDto.getLieuArriverId());
         trajet.setLieuDepart(lieuDepart);
         trajet.setLieuArriver(lieuArriver);
+        trajet.setPrice(trajetRequestDto.getPrice());
+        trajet.setDistance(trajetRequestDto.getDistance());
         trajet.setActive(trajetRequestDto.isActive());
         return trajetRepository.save(trajet);
     }
@@ -77,7 +79,10 @@ public class TrajetServiceImpl implements TrajetService {
             Lieu lieuArriver = lieuService.getLieuById(trajetRequestDto.getLieuArriverId());
             trajetToEdit.setLieuDepart(lieuDepart);
             trajetToEdit.setLieuArriver(lieuArriver);
+            trajetToEdit.setPrice(trajetRequestDto.getPrice());
             trajetToEdit.setActive(trajetRequestDto.isActive());
+            trajetToEdit.setDistance(trajetRequestDto.getDistance());
+            System.out.println(trajetRequestDto.getPrice());
             return trajetToEdit;
         } else {
             throw new BaseException("verifier le lieu de depart et arriver avant modification du trajet", HttpStatus.BAD_REQUEST);

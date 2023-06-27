@@ -48,6 +48,8 @@ public class LieuServiceImpl implements LieuService {
     public Lieu editLieu(Long lieuId, LieuRequestDto lieuRequestDto) throws BaseException {
         Lieu lieuToEdit = getLieuById(lieuId);
         lieuToEdit.setNomLieu(lieuRequestDto.getNomLieu());
+        lieuToEdit.setLatitude(lieuRequestDto.getLatitude());
+        lieuToEdit.setLongitude(lieuRequestDto.getLongitude());
         return lieuToEdit;
     }
 }

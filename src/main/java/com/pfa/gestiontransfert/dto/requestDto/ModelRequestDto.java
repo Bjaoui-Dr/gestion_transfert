@@ -13,4 +13,5 @@ public class ModelRequestDto {
     private int nbrPlace;
     private TypeModel typeVoiture;
     private boolean active;
+    private double price;
 }

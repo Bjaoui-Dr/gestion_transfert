@@ -19,6 +19,7 @@ public class Modele {
     @Enumerated(EnumType.STRING)
     private TypeModel typeVoiture;
     private boolean active;
+    private double price;
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private String image;

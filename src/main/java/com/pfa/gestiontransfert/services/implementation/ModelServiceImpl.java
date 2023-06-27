@@ -1,9 +1,6 @@
 package com.pfa.gestiontransfert.services.implementation;
 
-import com.azure.storage.blob.BlobClient;
-import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.BlobServiceClient;
-import com.azure.storage.blob.BlobServiceClientBuilder;
+
 import com.pfa.gestiontransfert.dto.requestDto.ModelRequestDto;
 import com.pfa.gestiontransfert.enumerations.TypeModel;
 import com.pfa.gestiontransfert.exceptions.BaseException;
@@ -28,12 +25,12 @@ import java.util.List;
 @Service
 public class ModelServiceImpl implements ModeleService {
     private final ModelRepository modelRepository;
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
     @Autowired
-    public ModelServiceImpl(ModelMapper mapper, ModelRepository modelRepository){
+    public ModelServiceImpl(ModelRepository modelRepository){
         this.modelRepository = modelRepository;
-        this.mapper = mapper;
+//        this.mapper = mapper;
 
     }
 
@@ -42,6 +39,7 @@ public class ModelServiceImpl implements ModeleService {
                             int nbrPlace,
                             TypeModel typeVoiture,
                             boolean active,
+                            double price,
                             MultipartFile file) throws BaseException {
         Modele modele = new Modele();
 //        if (modele.getTypeVoiture() == null ||
@@ -62,6 +60,7 @@ public class ModelServiceImpl implements ModeleService {
         modele.setActive(active);
         modele.setNbrPlace(nbrPlace);
         modele.setTypeVoiture(typeVoiture);
+        modele.setPrice(price);
         return modelRepository.save(modele);
     }
 
@@ -78,16 +77,17 @@ public class ModelServiceImpl implements ModeleService {
 
     @Override
     public Modele editModele(Long modelId, ModelRequestDto modelRequestDto) throws BaseException {
-        if (modelRepository.existsById(modelId)){
-            Modele modelToEdit = mapper.map(modelRequestDto, Modele.class);
-            modelToEdit.setIdModel(modelId);
-            if (modelToEdit.getTypeVoiture() == null ||
-                    !Arrays.asList(TypeModel.values()).contains(modelToEdit.getTypeVoiture())) {
-                throw new BaseException("Invalid typeVoiture", HttpStatus.BAD_REQUEST);
-            }
-            return modelRepository.save(modelToEdit);
-        } else {
-            throw new BaseException("Modele not found", HttpStatus.NOT_FOUND);
-        }
+//        if (modelRepository.existsById(modelId)){
+//            Modele modelToEdit = mapper.map(modelRequestDto, Modele.class);
+//            modelToEdit.setIdModel(modelId);
+//            if (modelToEdit.getTypeVoiture() == null ||
+//                    !Arrays.asList(TypeModel.values()).contains(modelToEdit.getTypeVoiture())) {
+//                throw new BaseException("Invalid typeVoiture", HttpStatus.BAD_REQUEST);
+//            }
+//            return modelRepository.save(modelToEdit);
+//        } else {
+//            throw new BaseException("Modele not found", HttpStatus.NOT_FOUND);
+//        }
+        return null;
     }
 }

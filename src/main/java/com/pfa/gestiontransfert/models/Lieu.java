@@ -12,6 +12,8 @@ public class Lieu {
     private Long idLieu;
     @Column(nullable = false)
     String nomLieu;
+    Double longitude;
+    Double latitude;
 
     public Lieu(String nomLieu) {
         this.nomLieu = nomLieu;

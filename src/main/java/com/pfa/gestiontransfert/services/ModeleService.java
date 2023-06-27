@@ -15,6 +15,7 @@ public interface ModeleService {
                             int nbrPlace,
                             TypeModel typeVoiture,
                             boolean active,
+                            double price,
                             MultipartFile file) throws BaseException;
     public List<Modele> getAllModeles();
     public Modele getModeleById(Long modelId) throws BaseException;

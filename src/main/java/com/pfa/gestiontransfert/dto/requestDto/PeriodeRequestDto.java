@@ -9,4 +9,5 @@ public class PeriodeRequestDto {
     private String nom;
     private LocalDate dateDebut;
     private LocalDate dateFin;
+    private double price;
 }

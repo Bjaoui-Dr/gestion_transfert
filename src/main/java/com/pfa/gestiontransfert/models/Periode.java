@@ -19,6 +19,7 @@ public class Periode {
     private String nom;
     private LocalDate dateDebut;
     private LocalDate dateFin;
+    private double price;
 
     public Periode(LocalDate dateDebut, LocalDate dateFin){
         this.dateDebut = dateDebut;
