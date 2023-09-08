@@ -17,7 +17,7 @@ import java.util.List;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idReservation;
+    private Long idReservation;
     private LocalDateTime dateCreation;
     @ManyToOne
     private Trajet trajetDepart;

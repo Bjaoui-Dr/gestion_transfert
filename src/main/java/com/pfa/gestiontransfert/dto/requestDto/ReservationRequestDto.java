@@ -1,5 +1,6 @@
 package com.pfa.gestiontransfert.dto.requestDto;
 
+import com.pfa.gestiontransfert.enumerations.Etat;
 import com.pfa.gestiontransfert.models.Extra;
 import lombok.Data;
 
@@ -16,5 +17,4 @@ public class ReservationRequestDto {
     Long idModel;
     int qteModele;
     List<Long> idExtras;
-
 }

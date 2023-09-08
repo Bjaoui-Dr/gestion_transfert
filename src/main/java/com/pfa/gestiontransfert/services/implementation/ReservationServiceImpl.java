@@ -7,7 +7,9 @@ import com.pfa.gestiontransfert.exceptions.BaseException;
 import com.pfa.gestiontransfert.models.*;
 import com.pfa.gestiontransfert.repositories.ReservationRepository;
 import com.pfa.gestiontransfert.services.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -25,18 +27,21 @@ public class ReservationServiceImpl implements ReservationService {
     private final PeriodeService periodeService;
     private final TrajetServiceImpl trajetService;
     private final ExtraService extraService;
+    private final ModelMapper mapper;
 
     @Autowired
     public ReservationServiceImpl(ReservationRepository reservationRepository,
                                   ModeleService modeleService,
                                   PeriodeService periodeService,
                                   TrajetServiceImpl trajetService,
-                                  ExtraService extraService){
+                                  ExtraService extraService,
+                                  ModelMapper mapper){
         this.reservationRepository = reservationRepository;
         this.modeleService = modeleService;
         this.periodeService = periodeService;
         this.trajetService = trajetService;
         this.extraService = extraService;
+        this.mapper = mapper;
     }
 
     @Override
@@ -80,21 +85,27 @@ public class ReservationServiceImpl implements ReservationService {
         addExtraSpecialBeforeDate(dateAller,reservation);
 
         // trajet retour
-//        if(reservationRequestDto.getIdTrajetRetour() != null){
-//            LocalTime timeRetour = reservationRequestDto.getDateAndTimeRetour().toLocalTime();
-//            Trajet trajetRetour = trajetService.getTrajetById(reservationRequestDto.getIdTrajetRetour());
-//            reservation.setTrajetRetour(trajetRetour);
-//            reservation.setDateAndTimeRetour(reservationRequestDto.getDateAndTimeRetour());
-//            double prixRetour = prixService.getPrixByModelTrajetPeriode(reservationRequestDto.getIdModel(),
-//                    reservationRequestDto.getIdTrajetRetour(),
-//                    idPeriode);
-//            reservation.addExtraFees(prixRetour);
-//            addExtraSpecialHorsTime(timeRetour,
-//                    startTime,
-//                    endTime,
-//                    reservation,
-//                    prixRetour);
-//        }
+        if(reservationRequestDto.getIdTrajetRetour() != null){
+            Trajet trajetRetour = trajetService.getTrajetById(reservationRequestDto.getIdTrajetRetour());
+            reservation.setTrajetRetour(trajetRetour);
+            reservation.setDateAndTimeRetour(reservationRequestDto.getDateAndTimeRetour());
+
+            LocalDate dateRetour = reservationRequestDto.getDateAndTimeRetour().toLocalDate();
+            LocalTime timeRetour = reservationRequestDto.getDateAndTimeRetour().toLocalTime();
+            Long idPeriodeRetour = periodeService.getIdPeriod(dateRetour);
+            Periode periodeRetour = periodeService.getPeriodeById(idPeriodeRetour);
+
+            reservation.addFees(trajetRetour.getPrice());
+            reservation.addFees(modele.getPrice());
+            reservation.addFees(periodeRetour.getPrice());
+
+            addExtraSpecialHorsTime(timeRetour,
+                    startTime,
+                    endTime,
+                    reservation);
+
+            addExtraSpecialBeforeDate(dateRetour,reservation);
+        }
 
         return reservationRepository.save(reservation);
     }
@@ -133,16 +144,25 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Reservation> listAllReservation() {
-        return null;
+        return reservationRepository.findAll();
     }
 
     @Override
-    public Reservation getReservationById(Long idReservation) {
-        return null;
+    public Reservation getReservationById(Long idReservation) throws BaseException {
+        return reservationRepository.findById(idReservation)
+                .orElseThrow(() -> new BaseException("Reservation not found", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public Reservation editReservation(Long idReservation, PrixRequestDto prixRequestDto) throws BaseException {
-        return null;
+    public Reservation editReservation(Long idReservation, String etat) throws BaseException {
+        if(reservationRepository.existsById(idReservation)) {
+            Reservation reservationToEdit = getReservationById(idReservation);
+            if(etat != null) {
+                reservationToEdit.setEtat(Etat.valueOf("REJETE"));
+            }
+            return reservationRepository.save(reservationToEdit);
+        } else {
+            throw new BaseException("Reservation not found", HttpStatus.NOT_FOUND);
+        }
     }
 }
